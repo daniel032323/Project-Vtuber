@@ -2,23 +2,23 @@
     "history": [
         {
             "role": "user",
-            "content": "nabang said hello"
+            "content": "nabang said hello what's your name?"
         },
         {
             "role": "assistant",
-            "content": "Hello!"
+            "content": "Hello! My name is \u3053\u3088."
         },
         {
             "role": "user",
-            "content": "nabang said hello"
+            "content": "nabang said \uc548\ub155! \ub108\ub294 \uc774\ub984\uc774 \ubb50\uc57c?"
         },
         {
             "role": "assistant",
-            "content": "Hello!"
+            "content": "\uc548\ub155\ud558\uc138\uc694! \uc81c \uc774\ub984\uc740 \u3053\u3088\uc774\uc5d0\uc694."
         },
         {
             "role": "user",
-            "content": "nabang said hello"
+            "content": "nabang said say something long"
         }
     ]
 }
