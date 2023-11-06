@@ -32,6 +32,7 @@ def load_history():
     return []
 
 conversation = load_history()
+# conversation = []
 # Create a dictionary to hold the message data
 history = {"history": conversation}
 
@@ -135,9 +136,9 @@ def openai_answer():
         # Write the message data to the file in JSON format
         json.dump(history, f, indent=4)
 
+    print(f"Answer: {message}")
     translate_text(message)
 
-'''
 # function to capture livechat from youtube
 def yt_livechat(video_id):
         global chat
@@ -156,7 +157,7 @@ def yt_livechat(video_id):
                         chat_raw = re.sub(r':[^\s]+:', '', c.message)
                         chat_raw = chat_raw.replace('#', '')
                         # chat_author makes the chat look like this: "Nightbot: Hello". So the assistant can respond to the user's name
-                        chat = c.author.name + ' berkata ' + chat_raw
+                        chat = c.author.name + ' said ' + chat_raw
                         print(chat)
                         
                     time.sleep(1)
@@ -197,7 +198,6 @@ def twitch_livechat():
 
         except Exception as e:
             print("Error receiving chat: {0}".format(e))
-'''
             
 # translating is optional
 def translate_text(text):
@@ -206,28 +206,18 @@ def translate_text(text):
     # subtitle = translate_google(text, "ID")
 
     # tts will be the string to be converted to audio
-    print(f"translated_text: {text}")
-    detect = detect_google(text)
+    
+    # detect = detect_google(text)
     # tts = translate_deeplx(text, f"{detect}", "JA")
-    # tts = translate_deeplx(text, f"{detect}", "JA")
-    # tts_en = translate_deeplx(text, f"{detect}", "EN")
-    tts = translate_deeplx(text, f"{detect}", "KO")
+    tts = translate_deepl(text, "KO")
+
     try:
         # print("ID Answer: " + subtitle)
-        # print("EN Answer: " + tts_en)
-        print("EN Answer: " + text)
         print("KR Answer: " + tts)
-        # print("JP Answer: " + tts)
     except Exception as e:
         print("Error printing text: {0}".format(e))
         return
 
-    # Choose between the available TTS engines
-    # Japanese TTS
-    # voicevox_tts(tts)
-
-    # Silero TTS, Silero TTS can generate English, Russian, French, Hindi, Spanish, German, etc. Uncomment the line below. Make sure the input is in that language
-    # silero_tts(tts_en, "en", "v3_en", "en_21")
     silero_tts(text, "en", "v3_en", "en_21")
     # voicevox_tts(tts)
 

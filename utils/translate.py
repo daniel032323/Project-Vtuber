@@ -2,6 +2,10 @@ import requests
 import json
 import sys
 import googletrans
+import deepl
+
+auth_key = "b9503ada-f075-bb11-276d-ff3649c343d6:fx"
+translator = deepl.Translator(auth_key)
 
 sys.stdout = open(sys.stdout.fileno(), mode='w', encoding='utf8', buffering=1)
 
@@ -9,6 +13,11 @@ sys.stdout = open(sys.stdout.fileno(), mode='w', encoding='utf8', buffering=1)
 # DeepL can translate more casual text in Japanese
 # DeepLx is a free and open-source DeepL API, i use this because DeepL Pro is not available in my country
 # but sometimes i'm facing request limit, so i use Google Translate as a backup
+
+def translate_deepl(text, target):
+    translated_text = str(translator.translate_text(text, target_lang=target))
+    return translated_text
+
 def translate_deeplx(text, source, target):
     url = "http://localhost:1188/translate"
     headers = {"Content-Type": "application/json"}
