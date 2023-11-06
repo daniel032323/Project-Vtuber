@@ -24,7 +24,14 @@ sys.stdout = open(sys.stdout.fileno(), mode='w', encoding='utf8', buffering=1)
 # use your own API Key, you can get it from https://openai.com/. I place my API Key in a separate file called config.py
 openai.api_key = api_key
 
-conversation = []
+# function to load the past history
+def load_history():
+    if os.path.exists("conversation.json"):
+        with open("conversation.json", "r", encoding="utf-8") as f:
+            return json.load(f).get("history", [])
+    return []
+
+conversation = load_history()
 # Create a dictionary to hold the message data
 history = {"history": conversation}
 
@@ -88,7 +95,8 @@ def transcribe_audio(file):
         print("Error transcribing audio: {0}".format(e))
         return
 
-    result = owner_name + " said " + chat_now
+    # result = owner_name + " said " + chat_now
+    result = chat_now
     conversation.append({'role': 'user', 'content': result})
     openai_answer()
 
@@ -102,6 +110,7 @@ def openai_answer():
         try:
             # print(total_characters)
             # print(len(conversation))
+            print(conversation)
             conversation.pop(2)
             total_characters = sum(len(d['content']) for d in conversation)
         except Exception as e:
@@ -122,6 +131,9 @@ def openai_answer():
     )
     message = response['choices'][0]['message']['content']
     conversation.append({'role': 'assistant', 'content': message})
+    with open("conversation.json", "w", encoding="utf-8") as f:
+        # Write the message data to the file in JSON format
+        json.dump(history, f, indent=4)
 
     translate_text(message)
 
@@ -196,15 +208,16 @@ def translate_text(text):
     # tts will be the string to be converted to audio
     print(f"translated_text: {text}")
     detect = detect_google(text)
-    tts = translate_deeplx(text, f"{detect}", "JA")
     # tts = translate_deeplx(text, f"{detect}", "JA")
-    tts_en = translate_deeplx(text, f"{detect}", "EN")
-    tts_kr = translate_deeplx(text, f"{detect}", "KO")
+    # tts = translate_deeplx(text, f"{detect}", "JA")
+    # tts_en = translate_deeplx(text, f"{detect}", "EN")
+    tts = translate_deeplx(text, f"{detect}", "KO")
     try:
         # print("ID Answer: " + subtitle)
-        print("EN Answer: " + tts_en)
-        print("KR Answer: " + tts_kr)
-        print("JP Answer: " + tts)
+        # print("EN Answer: " + tts_en)
+        print("EN Answer: " + text)
+        print("KR Answer: " + tts)
+        # print("JP Answer: " + tts)
     except Exception as e:
         print("Error printing text: {0}".format(e))
         return
@@ -215,7 +228,8 @@ def translate_text(text):
 
     # Silero TTS, Silero TTS can generate English, Russian, French, Hindi, Spanish, German, etc. Uncomment the line below. Make sure the input is in that language
     # silero_tts(tts_en, "en", "v3_en", "en_21")
-    voicevox_tts(tts)
+    silero_tts(text, "en", "v3_en", "en_21")
+    # voicevox_tts(tts)
 
     # Generate Subtitle
     generate_subtitle(chat_now, text)
