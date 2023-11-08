@@ -17,6 +17,7 @@ from utils.TTS import *
 from utils.subtitle import *
 from utils.promptMaker import *
 from utils.twitch_config import *
+from utils.movement import *
 
 # to help the CLI write unicode characters to the terminal
 sys.stdout = open(sys.stdout.fileno(), mode='w', encoding='utf8', buffering=1)
@@ -31,8 +32,8 @@ def load_history():
             return json.load(f).get("history", [])
     return []
 
-conversation = load_history()
-# conversation = []
+# conversation = load_history()
+conversation = []
 # Create a dictionary to hold the message data
 history = {"history": conversation}
 
@@ -163,7 +164,7 @@ def yt_livechat(video_id):
                     time.sleep(1)
             except Exception as e:
                 print("Error receiving chat: {0}".format(e))
-
+'''
 def twitch_livechat():
     global chat
     sock = socket.socket()
@@ -198,21 +199,17 @@ def twitch_livechat():
 
         except Exception as e:
             print("Error receiving chat: {0}".format(e))
-            
+'''
+         
 # translating is optional
 def translate_text(text):
     global is_Speaking
-    # subtitle will act as subtitle for the viewer
-    # subtitle = translate_google(text, "ID")
 
     # tts will be the string to be converted to audio
-    
-    # detect = detect_google(text)
-    # tts = translate_deeplx(text, f"{detect}", "JA")
+
     tts = translate_deepl(text, "KO")
 
     try:
-        # print("ID Answer: " + subtitle)
         print("KR Answer: " + tts)
     except Exception as e:
         print("Error printing text: {0}".format(e))
@@ -274,12 +271,12 @@ if __name__ == "__main__":
             t.start()
             yt_livechat(live_id)
 
-        elif mode == "3":
-            # Threading is used to capture livechat and answer the chat at the same time
-            print("To use this mode, make sure to change utils/twitch_config.py to your own config")
-            t = threading.Thread(target=preparation)
-            t.start()
-            twitch_livechat()
+        # elif mode == "3":
+        #     # Threading is used to capture livechat and answer the chat at the same time
+        #     print("To use this mode, make sure to change utils/twitch_config.py to your own config")
+        #     t = threading.Thread(target=preparation)
+        #     t.start()
+        #     twitch_livechat()
     except KeyboardInterrupt:
         t.join()
         print("Stopped")
