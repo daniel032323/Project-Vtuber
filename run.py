@@ -25,18 +25,6 @@ sys.stdout = open(sys.stdout.fileno(), mode='w', encoding='utf8', buffering=1)
 # use your own API Key, you can get it from https://openai.com/. I place my API Key in a separate file called config.py
 openai.api_key = api_key
 
-# function to load the past history
-def load_history():
-    if os.path.exists("conversation.json"):
-        with open("conversation.json", "r", encoding="utf-8") as f:
-            return json.load(f).get("history", [])
-    return []
-
-# conversation = load_history()
-conversation = []
-# Create a dictionary to hold the message data
-history = {"history": conversation}
-
 mode = 0
 total_characters = 0
 chat = ""
@@ -45,6 +33,32 @@ chat_prev = ""
 is_Speaking = False
 owner_name = "nabang"
 blacklist = ["Nightbot", "streamelements"]
+
+# function to load the past history
+def load_history():
+    default_conversation = [
+        {"role": "user", "content": "nabang said hello"},
+        {"role": "assistant", "content": "Hello! How can I help you?"},
+        {"role": "user", "content": "nabang said hello again"},
+        {"role": "assistant", "content": "Hello again! How can I assist you today?"}
+    ]
+
+    if os.path.exists("conversation.json"):
+        with open("conversation.json", "r", encoding="utf-8") as f:
+            content = f.read()
+            # 파일이 비어있으면 기본 대화 내용을 반환
+            if not content:
+                return default_conversation
+            try:
+                history = json.loads(content).get("history", [])
+                return history
+            except json.JSONDecodeError:
+                # JSON 형식 오류 발생 시 기본 대화 내용 반환
+                return default_conversation
+    else:
+        # 파일이 존재하지 않으면 기본 대화 내용을 반환
+        return default_conversation
+
 
 # function to get the user's input audio
 def record_audio():
@@ -207,10 +221,12 @@ def translate_text(text):
 
     # tts will be the string to be converted to audio
 
-    tts = translate_deepl(text, "KO")
+    tts = translate_deeplx(text, "EN", "KO")
+
+    text = translate_deeplx(text, "KO", "EN")
 
     try:
-        print("KR Answer: " + tts)
+        print("KO Answer: " + tts)
     except Exception as e:
         print("Error printing text: {0}".format(e))
         return
@@ -252,6 +268,15 @@ def preparation():
 
 if __name__ == "__main__":
     try:
+        conversation = load_history()
+        history = {"history": []}
+        # Create a dictionary to hold the message data
+        history["history"] = conversation
+
+        # Connect with Vtube studio api
+        myvts = pyvts.vts()
+        asyncio.run(connect_auth(myvts))
+
         # You can change the mode to 1 if you want to record audio from your microphone
         # or change the mode to 2 if you want to capture livechat from youtube
         mode = input("Mode (1-Mic, 2-Youtube Live, 3-Twitch Live): ")

@@ -13,7 +13,7 @@ def getIdentity(identityPath):
 def getPrompt():
     total_len = 0
     prompt = []
-    prompt.append(getIdentity("characterConfig/Pina/identity.txt"))
+    prompt.append(getIdentity("characterConfig/Kyosu/identity.txt"))
     prompt.append({"role": "system", "content": f"Below is conversation history.\n"})
 
     with open("conversation.json", "r") as f:

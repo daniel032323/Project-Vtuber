@@ -2,11 +2,31 @@
     "history": [
         {
             "role": "user",
-            "content": "nabang said hi. i'm nabang, your creator. nice to meet you."
+            "content": "nabang said hello"
         },
         {
             "role": "assistant",
-            "content": "Hi nabang! Nice to meet you too! \ud83d\ude0a"
+            "content": "Hello! How can I help you?"
+        },
+        {
+            "role": "user",
+            "content": "nabang said hello again"
+        },
+        {
+            "role": "assistant",
+            "content": "Hello again! How can I assist you today?"
+        },
+        {
+            "role": "user",
+            "content": "nabang said hhello"
+        },
+        {
+            "role": "user",
+            "content": "nabang said hello"
+        },
+        {
+            "role": "assistant",
+            "content": "Hello! How can I assist you today?"
         }
     ]
 }
