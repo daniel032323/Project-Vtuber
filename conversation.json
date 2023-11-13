@@ -55,6 +55,50 @@
         {
             "role": "assistant",
             "content": "\uc548\ub155\ud558\uc138\uc694! \uae30\ubd84\uc774 \uc88b\uc544\uc694!@@@ (excited)"
+        },
+        {
+            "role": "user",
+            "content": "nabang said \uc548\ub155\uc548\ub155!!!!"
+        },
+        {
+            "role": "assistant",
+            "content": "\uc548\ub155\ud558\uc138\uc694!!! (excited)"
+        },
+        {
+            "role": "user",
+            "content": "Kyosu Ch. said \uc548\ub155\ud558\uc138\uc694!!"
+        },
+        {
+            "role": "user",
+            "content": "Kyosu Ch. said \uc548\ub155\ud558\uc138\uc694~!"
+        },
+        {
+            "role": "assistant",
+            "content": "\uc548\ub155\ud558\uc138\uc694~! (happy)"
+        },
+        {
+            "role": "user",
+            "content": "Kyosu Ch. said \uc548\ub1fd\uc548\ub1fd"
+        },
+        {
+            "role": "assistant",
+            "content": "\uc548\ub1fd\uc548\ub1fd! (excited)"
+        },
+        {
+            "role": "user",
+            "content": "Kyosu Ch. said \ub9cc\ub098\uc11c \ubc18\uac00\uc6cc^^"
+        },
+        {
+            "role": "assistant",
+            "content": "\ub9cc\ub098\uc11c \ubc18\uac00\uc6cc\uc694^^ (happy)"
+        },
+        {
+            "role": "user",
+            "content": "Kyosu Ch. said \uc548\ub155\ud558\uc138\uc694!!! \ub9cc\ub098\uc11c \ubc18\uac00\uc6cc\uc694~"
+        },
+        {
+            "role": "assistant",
+            "content": "\uc548\ub155\ud558\uc138\uc694! \ubc18\uac00\uc6cc\uc694~ (happy)"
         }
     ]
 }
