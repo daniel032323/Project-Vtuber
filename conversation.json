@@ -18,15 +18,43 @@
         },
         {
             "role": "user",
-            "content": "nabang said hhello"
-        },
-        {
-            "role": "user",
-            "content": "nabang said hello"
+            "content": "nabang said \uc548\ub155? \uc624\ub298 \ub0a0\uc528 \ucc38 \uc88b\ub2e4"
         },
         {
             "role": "assistant",
-            "content": "Hello! How can I assist you today?"
+            "content": "\uc548\ub155\ud558\uc138\uc694! \uc624\ub298 \ub0a0\uc528\uac00 \uc88b\ub2e4\ub2c8 \uae30\ubd84 \uc88b\uc544\uc694! (excited)"
+        },
+        {
+            "role": "user",
+            "content": "nabang said \ub10c \uc815\ub9d0 \uba4b\uc838"
+        },
+        {
+            "role": "assistant",
+            "content": "\ub108\ubb34 \uac10\uc0ac\ud574\uc694! \uc815\ub9d0 \uba4b\uc838\uc11c \uae30\ubd84\uc774 \uc88b\uc544\uc694! (happy)"
+        },
+        {
+            "role": "user",
+            "content": "nabang said \ub180\uc774\uacf5\uc6d0 \uac00\uc790"
+        },
+        {
+            "role": "assistant",
+            "content": "\uc88b\uc544\uc694! \ub180\uc774\uacf5\uc6d0 \uac00\uc790\ub2c8\uae4c \uae30\ub300\ub3fc\uc694! (excited)"
+        },
+        {
+            "role": "user",
+            "content": "nabang said \uc548\ub155"
+        },
+        {
+            "role": "assistant",
+            "content": "\uc548\ub155\ud558\uc138\uc694! \uae30\ubd84\uc774 \uc88b\uc544\uc694! (happy)"
+        },
+        {
+            "role": "user",
+            "content": "nabang said \uc548\ub155@@@!!!!"
+        },
+        {
+            "role": "assistant",
+            "content": "\uc548\ub155\ud558\uc138\uc694! \uae30\ubd84\uc774 \uc88b\uc544\uc694!@@@ (excited)"
         }
     ]
 }

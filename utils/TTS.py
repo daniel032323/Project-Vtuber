@@ -33,9 +33,9 @@ def voicevox_tts(tts):
     katakana_text = katakana_converter(tts)
     # You can change the voice to your liking. You can find the list of voices on speaker.json
     # or check the website https://voicevox.hiroshiba.jp
-    params_encoded = urllib.parse.urlencode({'text': katakana_text, 'speaker': 46})
+    params_encoded = urllib.parse.urlencode({'text': katakana_text, 'speaker': 3})
     request = requests.post(f'{voicevox_url}/audio_query?{params_encoded}')
-    params_encoded = urllib.parse.urlencode({'speaker': 46, 'enable_interrogative_upspeak': True})
+    params_encoded = urllib.parse.urlencode({'speaker': 3, 'enable_interrogative_upspeak': True})
     request = requests.post(f'{voicevox_url}/synthesis?{params_encoded}', json=request.json())
 
     with open("test.wav", "wb") as outfile:

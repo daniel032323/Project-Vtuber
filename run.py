@@ -43,22 +43,46 @@ def load_history():
         {"role": "assistant", "content": "Hello again! How can I assist you today?"}
     ]
 
-    if os.path.exists("conversation.json"):
-        with open("conversation.json", "r", encoding="utf-8") as f:
-            content = f.read()
-            # 파일이 비어있으면 기본 대화 내용을 반환
-            if not content:
-                return default_conversation
-            try:
-                history = json.loads(content).get("history", [])
-                return history
-            except json.JSONDecodeError:
-                # JSON 형식 오류 발생 시 기본 대화 내용 반환
-                return default_conversation
-    else:
-        # 파일이 존재하지 않으면 기본 대화 내용을 반환
-        return default_conversation
+    with open("conversation.json", "r", encoding="utf-8") as f:
+        content = f.read()
+        # 파일이 비어있으면 기본 대화 내용을 반환
+        if not content:
+            return default_conversation
+        try:
+            history = json.loads(content).get("history", [])
+            return history
+        except json.JSONDecodeError:
+            # JSON 형식 오류 발생 시 기본 대화 내용 반환
+            return default_conversation
 
+# function to capture livechat from youtube
+def yt_livechat(video_id):
+        global chat
+
+        live = pytchat.create(video_id=video_id)
+        while live.is_alive():
+        # while True:
+            try:
+                for c in live.get().sync_items():
+                    if keyboard.is_pressed('RIGHT_SHIFT'):
+                        record_audio()
+                    elif keyboard.is_pressed('LEFT_SHIFT'):
+                        type_text()
+                    # Ignore chat from the streamer and Nightbot, change this if you want to include the streamer's chat
+                    elif c.author.name in blacklist:
+                        continue
+                    # if not c.message.startswith("!") and c.message.startswith('#'):
+                    elif not c.message.startswith("!"):
+                        # Remove emojis from the chat
+                        chat_raw = re.sub(r':[^\s]+:', '', c.message)
+                        chat_raw = chat_raw.replace('#', '')
+                        # chat_author makes the chat look like this: "Nightbot: Hello". So the assistant can respond to the user's name
+                        chat = c.author.name + ' said ' + chat_raw
+                        print(chat)
+                        
+                    time.sleep(1)
+            except Exception as e:
+                print("Error receiving chat: {0}".format(e))
 
 # function to get the user's input audio
 def record_audio():
@@ -126,7 +150,7 @@ def openai_answer():
         try:
             # print(total_characters)
             # print(len(conversation))
-            print(conversation)
+            # print(conversation)
             conversation.pop(2)
             total_characters = sum(len(d['content']) for d in conversation)
         except Exception as e:
@@ -152,98 +176,43 @@ def openai_answer():
         json.dump(history, f, indent=4)
 
     print(f"Answer: {message}")
-    translate_text(message)
+    read_text(message)
 
-# function to capture livechat from youtube
-def yt_livechat(video_id):
-        global chat
+def read_text(text):
+    global is_Speaking, feeling
 
-        live = pytchat.create(video_id=video_id)
-        while live.is_alive():
-        # while True:
-            try:
-                for c in live.get().sync_items():
-                    # Ignore chat from the streamer and Nightbot, change this if you want to include the streamer's chat
-                    if c.author.name in blacklist:
-                        continue
-                    # if not c.message.startswith("!") and c.message.startswith('#'):
-                    if not c.message.startswith("!"):
-                        # Remove emojis from the chat
-                        chat_raw = re.sub(r':[^\s]+:', '', c.message)
-                        chat_raw = chat_raw.replace('#', '')
-                        # chat_author makes the chat look like this: "Nightbot: Hello". So the assistant can respond to the user's name
-                        chat = c.author.name + ' said ' + chat_raw
-                        print(chat)
-                        
-                    time.sleep(1)
-            except Exception as e:
-                print("Error receiving chat: {0}".format(e))
-'''
-def twitch_livechat():
-    global chat
-    sock = socket.socket()
-
-    sock.connect((server, port))
-
-    sock.send(f"PASS {token}\n".encode('utf-8'))
-    sock.send(f"NICK {nickname}\n".encode('utf-8'))
-    sock.send(f"JOIN {channel}\n".encode('utf-8'))
-
-    regex = r":(\w+)!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :(.+)"
-
-    while True:
-        try:
-            resp = sock.recv(2048).decode('utf-8')
-
-            if resp.startswith('PING'):
-                    sock.send("PONG\n".encode('utf-8'))
-
-            elif not user in resp:
-                resp = demojize(resp)
-                match = re.match(regex, resp)
-
-                username = match.group(1)
-                message = match.group(2)
-
-                if username in blacklist:
-                    continue
-                
-                chat = username + ' said ' + message
-                print(chat)
-
-        except Exception as e:
-            print("Error receiving chat: {0}".format(e))
-'''
-         
-# translating is optional
-def translate_text(text):
-    global is_Speaking
-
-    # tts will be the string to be converted to audio
+    if re.search(r'\((.*?)\)', text):
+        feeling = re.search(r'\((.*?)\)', text).group(1)
+        text = re.sub(r'\(.*?\)', '', text).strip()
 
     tts = translate_deeplx(text, "EN", "KO")
-
-    text = translate_deeplx(text, "KO", "EN")
+    lan = detect_google(text)
+    text = translate_deeplx(text, lan, "JA")
 
     try:
+        print("JA Answer: " + text)
         print("KO Answer: " + tts)
     except Exception as e:
         print("Error printing text: {0}".format(e))
         return
 
-    silero_tts(text, "en", "v3_en", "en_21")
-    # voicevox_tts(tts)
+    # silero_tts(text, "en", "v3_en", "en_21")
+    voicevox_tts(text)
 
-    # Generate Subtitle
     generate_subtitle(chat_now, text)
 
     time.sleep(1)
 
     # is_Speaking is used to prevent the assistant speaking more than one audio at a time
     is_Speaking = True
+    if feeling != "":
+        asyncio.run(trigger(myvts, feeling))
     winsound.PlaySound("test.wav", winsound.SND_FILENAME)
     time.sleep(1)
     is_Speaking = False
+    if feeling != "":
+        asyncio.run(trigger(myvts, "clear"))
+        feeling = ""
     print("Speaking Finished\n\nPress and Hold Right Shift to record audio or Press Left Shift to type text")
 
     # Clear the text files after the assistant has finished speaking
@@ -259,6 +228,7 @@ def preparation():
         # If the assistant is not speaking, and the chat is not empty, and the chat is not the same as the previous chat
         # then the assistant will answer the chat
         chat_now = chat
+        asyncio.run(trigger(myvts, "Look_chat"))
         if is_Speaking == False and chat_now != chat_prev:
             # Saving chat history
             conversation.append({'role': 'user', 'content': chat_now})
@@ -270,16 +240,14 @@ if __name__ == "__main__":
     try:
         conversation = load_history()
         history = {"history": []}
-        # Create a dictionary to hold the message data
         history["history"] = conversation
 
         # Connect with Vtube studio api
         myvts = pyvts.vts()
         asyncio.run(connect_auth(myvts))
+        feeling = ""
 
-        # You can change the mode to 1 if you want to record audio from your microphone
-        # or change the mode to 2 if you want to capture livechat from youtube
-        mode = input("Mode (1-Mic, 2-Youtube Live, 3-Twitch Live): ")
+        mode = input("Mode (1-Mic, 2-Youtube Live): ")
 
         if mode == "1":
             print("Press and Hold Right Shift to record audio or Press Left Shift to type text")
@@ -290,18 +258,13 @@ if __name__ == "__main__":
                     type_text()
             
         elif mode == "2":
-            live_id = input("Livestream ID: ")
+            live_url = input("Livestream url: ")
+            live_id = live_url.split('v=')[1]
             # Threading is used to capture livechat and answer the chat at the same time
             t = threading.Thread(target=preparation)
             t.start()
             yt_livechat(live_id)
-
-        # elif mode == "3":
-        #     # Threading is used to capture livechat and answer the chat at the same time
-        #     print("To use this mode, make sure to change utils/twitch_config.py to your own config")
-        #     t = threading.Thread(target=preparation)
-        #     t.start()
-        #     twitch_livechat()
+                
     except KeyboardInterrupt:
         t.join()
         print("Stopped")

@@ -1,2 +1,2 @@
-voicevox 쓰려면 docker run --rm -it -p 50021:50021 voicevox/voicevox_engine:cpu-ubuntu20.04-latest
-deeplx 쓰려면 docker run -itd -p 1188:1188 missuo/deeplx:latest
+docker run --rm -it -p 50021:50021 voicevox/voicevox_engine:cpu-ubuntu20.04-latest
+docker run -itd -p 1188:1188 missuo/deeplx:latest
