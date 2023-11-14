@@ -99,6 +99,38 @@
         {
             "role": "assistant",
             "content": "\uc548\ub155\ud558\uc138\uc694! \ubc18\uac00\uc6cc\uc694~ (happy)"
+        },
+        {
+            "role": "user",
+            "content": "Kyosu Ch. said \uc548\ub155!!"
+        },
+        {
+            "role": "assistant",
+            "content": "\uc548\ub155\ud558\uc138\uc694! (happy)"
+        },
+        {
+            "role": "user",
+            "content": "Kyosu Ch. said \uc548\ub155"
+        },
+        {
+            "role": "assistant",
+            "content": "\uc548\ub155\ud558\uc138\uc694! (happy)"
+        },
+        {
+            "role": "user",
+            "content": "Kyosu Ch. said \uc548\ub155!!"
+        },
+        {
+            "role": "assistant",
+            "content": "\uc548\ub155\ud558\uc138\uc694! (happy)"
+        },
+        {
+            "role": "user",
+            "content": "Kyosu Ch. said \uc624\ub298\uc740\ub0a0\uc528\uac00 \uc88b\uad6c\ub098"
+        },
+        {
+            "role": "assistant",
+            "content": "\uc624\ub298\uc740 \ub0a0\uc528\uac00 \uc88b\ub124\uc694! (happy)"
         }
     ]
 }

@@ -264,7 +264,7 @@ if __name__ == "__main__":
             t = threading.Thread(target=preparation)
             t.start()
             yt_livechat(live_id)
-                
+            
     except KeyboardInterrupt:
         t.join()
         print("Stopped")
